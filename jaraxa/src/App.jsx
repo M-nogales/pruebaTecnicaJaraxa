@@ -1,35 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { ThemeProvider} from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
+import { Navbar } from "./components/Navbar";
+import { DrugList } from "./components/DrugList";
+import { DrugDetail } from "./components/DrugDetail";
+import { ColorModeContext } from "./context/ColorModeContext";
+import { useColorMode } from './hooks/useColorMode';
+
+const App = () => {
+  // coment hook que contiene toda la lógica del theme switch con material UI
+  const { colorMode, theme } = useColorMode();
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<DrugList />} />
+            <Route path="/drug/:drugId" element={<DrugDetail />} />
+          </Routes>
+        </Router>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
+  );
+};
 
-export default App
+export default App;
