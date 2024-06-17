@@ -1,35 +1,68 @@
-import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
-import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { useTheme } from '@mui/material/styles';
+import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
+import NightlightRoundedIcon from "@mui/icons-material/NightlightRounded";
+import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 
-import { ColorModeContext } from '../context/ColorModeContext';
+import { useTheme } from "@mui/material/styles";
+import { ColorModeContext } from "../context/ColorModeContext";
+import { Link, Typography } from "@mui/material";
+
+import { green } from "@mui/material/colors";
 
 export const Navbar = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
 
   return (
-    <nav>
-      <ul>
-        <li><Link to="/">Jaraxa</Link></li>
-        <li>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
+    <Box
+      component="nav"
+      sx={{
+        backgroundColor: "success.main",
+        display: "flex",
+      }}
+    >
+      <Box
+        component="ul"
+        sx={{
+          listStyle: "none",
+          display: "flex",
+          alignItems: "center",
+          padding: 0,
+          width: 1,
+        }}
+      >
+        <Box component="li" sx={{ flexGrow: 1, ml: { xs: 5, md: 10 } }}>
+          <Typography
+            variant="h5"
+            sx={{ mb: 0, color: green[600] }}
+            gutterBottom
           >
-            <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-              {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
-          </Box>
-        </li>
-      </ul>
-    </nav>
+            <Link
+              component={RouterLink}
+              to="/"
+              sx={{ textDecoration: "none", color: "inherit" }}
+            >
+              Jaraxa
+            </Link>
+          </Typography>
+        </Box>
+        <Box component="li">
+          <IconButton
+            sx={{ mr: { xs: 3, md: 7 } }}
+            onClick={colorMode.toggleColorMode}
+            color="inherit"
+          >
+            {theme.palette.mode === "dark" ? (
+              <NightlightRoundedIcon />
+            ) : (
+              <LightModeRoundedIcon />
+            )}
+          </IconButton>
+        </Box>
+      </Box>
+    </Box>
   );
 };
