@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 import successResponse from "../data/successResponse.json";
 // import errorResponse from "../data/errorResponse.json";
 
@@ -10,25 +8,34 @@ import {
   Button,
   FormControlLabel,
   Checkbox,
+  Container,
+  Tooltip,
 } from "@mui/material";
+import TaskIcon from "@mui/icons-material/Task";
 import { useState } from "react";
+import { green } from "@mui/material/colors";
+import { DrugListItems } from "./DrugListItems";
+import { useSearch } from "../hooks/useSearch";
 
 export const DrugList = () => {
-  const [checked, setChecked] = useState(true);
-
+  const { searchData, setSearchData, error } = useSearch();
+  console.log("searchData"+searchData);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submited");
+    setSearchData(prevSearchData => ({ ...prevSearchData, manufacturer: ''  }))
   };
-  const handleCheck = (event) => {
-    setChecked(event.target.checked);
+
+  const handleFormChange = (event) => {
+    // coment toggle para checked
+    const { name, value, checked } = event.target;
+    setSearchData(prevSearchData => ({ ...prevSearchData, [name]: checked? checked : value }));
   };
   return (
-    <div>
+    <Container component={"main"}>
       <Typography
         sx={{ display: "flex", justifyContent: "center" }}
         variant="h1"
-        color="initial"
       >
         Drugs
       </Typography>
@@ -51,6 +58,8 @@ export const DrugList = () => {
             variant="outlined"
             margin="normal"
             sx={{ my: 0 }}
+            name="substanceName"
+            onChange={handleFormChange}
           />
           {/* generic_name */}
           <TextField
@@ -59,6 +68,9 @@ export const DrugList = () => {
             variant="outlined"
             margin="normal"
             sx={{ my: 0 }}
+            name="genericName"
+            onChange={handleFormChange}
+            value={searchData.genericName}
           />
           {/* manufacturer_name */}
           <TextField
@@ -67,6 +79,9 @@ export const DrugList = () => {
             variant="outlined"
             margin="normal"
             sx={{ my: 0 }}
+            name="manufacturer"
+            onChange={handleFormChange}
+            value={searchData.manufacturer}
           />
 
           {/* openfda.product_type (HUMAN OTC DRUG) */}
@@ -74,9 +89,10 @@ export const DrugList = () => {
             label="OTC"
             control={
               <Checkbox
-                checked={checked}
-                onChange={handleCheck}
+                checked={searchData.OTC}
+                onChange={handleFormChange}
                 color="primary"
+                name="OTC"
               />
             }
           />
@@ -86,13 +102,27 @@ export const DrugList = () => {
           </Button>
         </Box>
       </form>
-      <ul>
-        {successResponse.results.map((drug) => (
-          <li key={drug.set_id}>
-            <Link to={`/drug/${drug.set_id}`}>{drug.openfda.brand_name}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+
+      {/* legend */}
+      <Box>
+        <Tooltip title="Human OTC">
+          <TaskIcon
+            fontSize="large"
+            sx={{
+              mt: 1,
+              bgcolor: green[500],
+              color: "white",
+              borderRadius: "50%",
+              p: 1,
+              ":hover": {
+                bgcolor: green[700],
+              },
+            }}
+          />
+        </Tooltip>
+      </Box>
+      {/* grid with all the meds */}
+      {/* <DrugListItems successResponse={successResponse} /> */}
+    </Container>
   );
 };

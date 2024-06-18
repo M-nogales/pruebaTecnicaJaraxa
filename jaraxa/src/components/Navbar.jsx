@@ -37,7 +37,7 @@ export const Navbar = () => {
         <Box component="li" sx={{ flexGrow: 1, ml: { xs: 5, md: 10 } }}>
           <Typography
             variant="h5"
-            sx={{ mb: 0, color: green[600] }}
+            sx={{ mb: 0 }}
             gutterBottom
           >
             <Link
@@ -45,7 +45,7 @@ export const Navbar = () => {
               to="/"
               sx={{ textDecoration: "none", color: "inherit" }}
             >
-              Jaraxa
+              JaraxaCare
             </Link>
           </Typography>
         </Box>
