@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 // coment to avoid extension warning
 
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import { Button, Card, CardActionArea, CardActions, CardContent, Grid, Typography } from "@mui/material";
 import { green, red } from "@mui/material/colors";
@@ -62,7 +62,7 @@ export const DrugListItems = ({successResponse}) => {
           </CardActionArea>
           <CardActions>
             <Button
-              component={Link}
+              component={NavLink}
               to={`/drug/${drug.set_id}`}
               variant="outlined"
               size="small"

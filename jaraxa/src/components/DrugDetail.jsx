@@ -1,5 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button'
+import { useEffect } from 'react';
+
+
 
 const drugs = [
   { id: 1, name: 'Drugs 1', description: 'Description of Drugs 1' },

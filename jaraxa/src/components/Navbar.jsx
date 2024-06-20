@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { Link as RouterLink } from "react-router-dom";
-
+import { NavLink as RouterLink } from "react-router-dom";
+// coment NavLink ?
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import NightlightRoundedIcon from "@mui/icons-material/NightlightRounded";
@@ -10,7 +10,6 @@ import { useTheme } from "@mui/material/styles";
 import { ColorModeContext } from "../context/ColorModeContext";
 import { Link, Typography } from "@mui/material";
 
-import { green } from "@mui/material/colors";
 
 export const Navbar = () => {
   const theme = useTheme();
