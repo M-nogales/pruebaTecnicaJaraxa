@@ -13,10 +13,12 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { DrugListItems } from "./DrugListItems";
+
+import {  useEffect, useState } from "react";
+
 import { useSearch } from "../hooks/useSearch";
 import { useDrugs } from "../hooks/useDrugs";
-import {  useEffect, useState } from "react";
+import { DrugListItems } from "./DrugListItems";
 
 export const DrugList = () => {
   const {
@@ -27,13 +29,16 @@ export const DrugList = () => {
   } = useSearch();
 
   const { drugs, getDrugs, loading, error } = useDrugs();
-
+  // controll and visual hooks
   const [submitted,setSubmitted] = useState(false);
   const [openBackdrop, setOpenBackdrop] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (inputError.substanceName || inputError.genericName || inputError.manufacturer) {
+      return;
+    }
     getDrugs(searchData);
     setSearchData({
       substanceName: "",
@@ -49,7 +54,7 @@ export const DrugList = () => {
       manufacturer: true,
     };
   };
-
+  // useEffects to check if there´s new errors an spawn backdrop
   useEffect(() => {
     if (error) {
       setOpenSnackbar(true);
@@ -66,18 +71,22 @@ export const DrugList = () => {
   }, [openBackdrop]);
 
   const handleFormChange = (event) => {
-    // coment toggle para checked
+    // save of input name and his value in search hook, in case of checkbox guardamos checked no value
     const { name, value, checked } = event.target;
 
     setSearchData((prevSearchData) => ({
       ...prevSearchData,
       [name]: name === "OTC" ? checked : value,
     }));
-
-    if (isFirstInput.current[name]) {
+    //update useRef, if the value is empty and is not the firstInput,change it
+    // if the value is not empty and is the firstInput,change it
+    if (value === "" && isFirstInput.current[name] === false) {
+      isFirstInput.current[name] = true;
+    } else if (value !== "" && isFirstInput.current[name] === true) {
       isFirstInput.current[name] = false;
     }
   };
+
   return (
     <Container component={"main"} sx={{minHeight:"90vh"}}>
       <Typography
@@ -210,7 +219,6 @@ export const DrugList = () => {
       )} 
        {submitted &&  drugs && (
          <DrugListItems drugs={drugs} />
-
       )} 
 
     </Container>

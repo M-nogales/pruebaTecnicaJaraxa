@@ -1,8 +1,4 @@
 import { useNavigate, useParams } from "react-router-dom";
-import Button from "@mui/material/Button";
-import { useDrugs } from "../hooks/useDrugs";
-import { useSearch } from "../hooks/useSearch";
-import { useEffect, useState } from "react";
 import {
   Alert,
   Box,
@@ -17,6 +13,12 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { green, red } from "@mui/material/colors";
 import RequestPageIcon from "@mui/icons-material/RequestPage";
 import TaskIcon from "@mui/icons-material/Task";
+import Button from "@mui/material/Button";
+
+import { useEffect, useState } from "react";
+
+import { useDrugs } from "../hooks/useDrugs";
+import { useSearch } from "../hooks/useSearch";
 
 export const DrugDetail = () => {
   const { drugId } = useParams();
@@ -25,10 +27,11 @@ export const DrugDetail = () => {
   const { setSearchData } = useSearch();
 
   useEffect(() => {
-    // añadir id a searchData para el fetch
+    // add id to searchData for fetch
     setSearchData((prev) => ({ ...prev, id: drugId }));
     getDrugs({ id: drugId });
   }, [drugId, setSearchData, getDrugs]);
+
   const [openBackdrop, setOpenBackdrop] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -79,7 +82,6 @@ export const DrugDetail = () => {
           Error: {error}
         </Alert>
       </Snackbar>
-      ;
       <Box component={"header"}>
         <Button
           variant="outlined"

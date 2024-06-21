@@ -1,17 +1,19 @@
-import { useState, useCallback, useMemo } from 'react';
-import { createTheme } from '@mui/material/styles';
+import { useState, useCallback, useMemo } from "react";
+import { createTheme } from "@mui/material/styles";
 
+// custom hook created to change themes
 export const useColorMode = () => {
-  const [mode, setMode] = useState('light');
+  const [mode, setMode] = useState("light");
 
-  // coment toggle color mode con useCallBack para sugar
+  // toggle color mode with useCallBack for more sugar
+  // useCallback == useMemo, useCallback just for functions
   const toggleColorMode = useCallback(() => {
-    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+    setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
   }, []);
 
   const colorMode = useMemo(() => ({ toggleColorMode }), [toggleColorMode]);
 
-  // coment create theme based on material UI doc https://mui.com/material-ui/customization/dark-mode/
+  // create theme based on material UI doc https://mui.com/material-ui/customization/dark-mode/
   const theme = useMemo(
     () =>
       createTheme({

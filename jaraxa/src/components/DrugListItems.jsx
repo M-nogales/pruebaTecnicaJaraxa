@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-// coment to avoid extension warning
+// to avoid extension warning
 
 import { NavLink } from "react-router-dom";
 

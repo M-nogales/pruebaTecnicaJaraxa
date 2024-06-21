@@ -1,5 +1,5 @@
 import { createContext } from 'react';
 
-// coment apartado de app.jsx debido a organización y evitar problemas con vite + swc
+// apart of app.jsx to prevent vite + swc errors + more organization
 
 export const ColorModeContext = createContext({ toggleColorMode: () => {} });

@@ -26,8 +26,9 @@ function constructQueryString(searchData) {
 
   return queryParts.join("+AND+");
 }
+// created to fetch the needed data easily
 export const fetchDrugs = async (searchData) => {
-  //coment en caso de que la busqueda esté vacia return nul
+  // return null if searchData is void
   if (
     !searchData.substanceName &&
     !searchData.genericName &&
@@ -37,6 +38,7 @@ export const fetchDrugs = async (searchData) => {
     return;
 
   try {
+    // build of the query with the search parts
     let queryString = constructQueryString(searchData);
     const response = await fetch(
       `https://api.fda.gov/drug/label.json?search=${queryString}&limit=12`

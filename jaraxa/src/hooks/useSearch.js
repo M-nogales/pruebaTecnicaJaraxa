@@ -1,9 +1,8 @@
-/* eslint-disable react/prop-types */
-// coment to avoid extension warning
-
 import { useEffect, useRef, useState } from "react";
 
+// created to controll searchs
 export const useSearch = () => {
+  // useState that is going to save the searchData with a default obj
   const [searchData, setSearchData] = useState({
     id: "",
     substanceName: "",
@@ -12,11 +11,14 @@ export const useSearch = () => {
     OTC: false,
   });
   const [error, setError] = useState({});
+  // use the use ref to save between renders, only changes
+  // if i write over an input
   const isFirstInput = useRef({
     substanceName: true,
     genericName: true,
     manufacturer: true,
   });
+  // validation of a few cases for the inputs
   const validate = (data) => {
     const newErrors = {};
 
