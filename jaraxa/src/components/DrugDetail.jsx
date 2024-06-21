@@ -1,22 +1,31 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button'
+import { useDrugs } from "../hooks/useDrugs";
+import { useSearch } from "../hooks/useSearch";
 import { useEffect } from 'react';
+import { Typography } from '@mui/material';
 
 
 
-const drugs = [
-  { id: 1, name: 'Drugs 1', description: 'Description of Drugs 1' },
-  { id: 2, name: 'Drugs 2', description: 'Description of Drugs 2' },
-  { id: 3, name: 'Drugs 3', description: 'Description of Drugs 3' },
-];
 
 export const DrugDetail = () => {
   const { drugId } = useParams();
   const navigate = useNavigate();
-  const drug = drugs.find(d => d.id === parseInt(drugId));
+  const { drugs, getDrugs, loading, error } = useDrugs();
+  const { setSearchData } = useSearch();
 
-  if (!drug) {
-    return <h2>Drugs not found</h2>;
+  useEffect(() => {
+    // Establece el id en searchData y ejecuta la búsqueda
+    setSearchData((prev) => ({ ...prev, id: drugId }));
+    getDrugs({ id: drugId });
+  }, [drugId, setSearchData, getDrugs]);
+
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
+
+  if (error) {
+    return <h2>{error}</h2>;
   }
 
   return (
@@ -25,8 +34,13 @@ export const DrugDetail = () => {
       <Button variant="outlined" color="primary" onClick={() => navigate(-1)}>
         Back
       </Button>
-      <h3>{drug.name}</h3>
-      <p>{drug.description}</p>
+      {drugs.results.map((drug) => (
+                <Typography key={drug.set_id} gutterBottom variant="h5" component="div">
+                {drug.openfda.brand_name}
+              </Typography>
+
+      ))}
+
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 export const useSearch = () => {
   const [searchData, setSearchData] = useState({
+    id: "",
     substanceName: "",
     genericName: "",
     manufacturer: "",

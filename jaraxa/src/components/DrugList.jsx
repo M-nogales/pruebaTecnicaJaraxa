@@ -1,6 +1,3 @@
-import successResponse from "../data/successResponse.json";
-// import errorResponse from "../data/errorResponse.json";
-
 import {
   Box,
   TextField,
@@ -13,22 +10,63 @@ import {
   Grid,
   FormHelperText,
   FormControl,
+  CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import TaskIcon from "@mui/icons-material/Task";
 import { green } from "@mui/material/colors";
 import { DrugListItems } from "./DrugListItems";
 import { useSearch } from "../hooks/useSearch";
+import { useDrugs } from "../hooks/useDrugs";
+import {  useEffect, useState } from "react";
 
 export const DrugList = () => {
-  const { searchData, setSearchData, isFirstInput, error } = useSearch();
+  const {
+    searchData,
+    setSearchData,
+    isFirstInput,
+    error: inputError,
+  } = useSearch();
+
+  const { drugs, getDrugs, loading, error } = useDrugs();
+
+  const [submitted,setSubmitted] = useState(false);
+  const [openBackdrop, setOpenBackdrop] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submited");
-    setSearchData((prevSearchData) => ({
-      ...prevSearchData,
+    getDrugs(searchData);
+    setSearchData({
+      substanceName: "",
+      genericName: "",
       manufacturer: "",
-    }));
+      OTC: false,
+    });
+    setSubmitted(true);
+    setOpenBackdrop(true);
+    isFirstInput.current = {
+      substanceName: true,
+      genericName: true,
+      manufacturer: true,
+    };
   };
+
+  useEffect(() => {
+    if (error) {
+      setOpenSnackbar(true);
+      setOpenBackdrop(false);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setOpenBackdrop(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [openBackdrop]);
 
   const handleFormChange = (event) => {
     // coment toggle para checked
@@ -38,12 +76,11 @@ export const DrugList = () => {
       ...prevSearchData,
       [name]: name === "OTC" ? checked : value,
     }));
+
     if (isFirstInput.current[name]) {
-      console.log("test");
       isFirstInput.current[name] = false;
     }
   };
-
   return (
     <Container component={"main"}>
       <Typography
@@ -71,7 +108,7 @@ export const DrugList = () => {
           <Grid item xs={12} sm={4}>
             <FormControl
               fullWidth
-              error={!!error.substanceName}
+              error={!!inputError.substanceName}
               variant="outlined"
               sx={{ my: 1 }}
             >
@@ -80,10 +117,12 @@ export const DrugList = () => {
                 type="search"
                 variant="outlined"
                 name="substanceName"
+                error={!!inputError.substanceName}
+                value={searchData.substanceName}
                 onChange={handleFormChange}
               />
-              {error.substanceName && (
-                <FormHelperText>{error.substanceName}</FormHelperText>
+              {inputError.substanceName && (
+                <FormHelperText>{inputError.substanceName}</FormHelperText>
               )}
             </FormControl>
           </Grid>
@@ -92,7 +131,7 @@ export const DrugList = () => {
           <Grid item xs={12} sm={4}>
             <FormControl
               fullWidth
-              error={!!error.genericName}
+              error={!!inputError.genericName}
               variant="outlined"
               sx={{ my: 1 }}
             >
@@ -101,11 +140,12 @@ export const DrugList = () => {
                 type="search"
                 variant="outlined"
                 name="genericName"
+                error={!!inputError.genericName}
                 value={searchData.genericName}
                 onChange={handleFormChange}
               />
-              {error.genericName && (
-                <FormHelperText>{error.genericName}</FormHelperText>
+              {inputError.genericName && (
+                <FormHelperText>{inputError.genericName}</FormHelperText>
               )}
             </FormControl>
           </Grid>
@@ -114,7 +154,7 @@ export const DrugList = () => {
           <Grid item xs={12} sm={4}>
             <FormControl
               fullWidth
-              error={!!error.manufacturer}
+              error={!!inputError.manufacturer}
               variant="outlined"
               sx={{ my: 1 }}
             >
@@ -124,10 +164,11 @@ export const DrugList = () => {
                 variant="outlined"
                 name="manufacturer"
                 value={searchData.manufacturer}
+                error={!!inputError.manufacturer}
                 onChange={handleFormChange}
               />
-              {error.manufacturer && (
-                <FormHelperText>{error.manufacturer}</FormHelperText>
+              {inputError.manufacturer && (
+                <FormHelperText>{inputError.manufacturer}</FormHelperText>
               )}
             </FormControl>
           </Grid>
@@ -172,9 +213,28 @@ export const DrugList = () => {
           </Grid>
         </Grid>
       </Box>
+      {/* Snackbar for Error Message */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={() => setOpenSnackbar(false)} severity="error">
+          Error: {error}
+        </Alert>
+      </Snackbar>
+      {/* grid with all the drugs */}
+      {submitted  && loading && (
+        <Box sx={{w:1,display:"flex",justifyContent:"center",my:4}}>
+        <CircularProgress size={80}></CircularProgress>
+        </Box>
+      )} 
+       {submitted &&  drugs && (
+         <DrugListItems drugs={drugs} />
 
-      {/* grid with all the meds */}
-      <DrugListItems successResponse={successResponse} />
+      )} 
+
     </Container>
   );
 };
