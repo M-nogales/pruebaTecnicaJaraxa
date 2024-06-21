@@ -6,7 +6,6 @@ import {
   FormControlLabel,
   Checkbox,
   Container,
-  Tooltip,
   Grid,
   FormHelperText,
   FormControl,
@@ -14,8 +13,6 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import TaskIcon from "@mui/icons-material/Task";
-import { green } from "@mui/material/colors";
 import { DrugListItems } from "./DrugListItems";
 import { useSearch } from "../hooks/useSearch";
 import { useDrugs } from "../hooks/useDrugs";
@@ -82,7 +79,7 @@ export const DrugList = () => {
     }
   };
   return (
-    <Container component={"main"}>
+    <Container component={"main"} sx={{minHeight:"90vh"}}>
       <Typography
         sx={{ display: "flex", justifyContent: "center" }}
         variant="h1"
@@ -191,25 +188,6 @@ export const DrugList = () => {
             <Button variant="outlined" color="primary" type="submit">
               Search
             </Button>
-          </Grid>
-          {/* legend */}
-          <Grid item xs={12} sx={{ textAlign: "center" }}>
-            <Tooltip title="Human OTC">
-              <TaskIcon
-                fontSize="large"
-                sx={{
-                  mt: 1,
-                  mx: 1,
-                  bgcolor: green[500],
-                  color: "white",
-                  borderRadius: "50%",
-                  p: 1,
-                  ":hover": {
-                    bgcolor: green[700],
-                  },
-                }}
-              />
-            </Tooltip>
           </Grid>
         </Grid>
       </Box>

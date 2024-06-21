@@ -10,6 +10,7 @@ import {
   CardActions,
   CardContent,
   Grid,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { green, red } from "@mui/material/colors";
@@ -18,7 +19,7 @@ import TaskIcon from "@mui/icons-material/Task";
 
 export const DrugListItems = ({ drugs }) => {
   return (
-    <Grid container spacing={2} sx={{ mt: 4, mb: 4, justifyItems: "center" }}>
+    <Grid container spacing={2} sx={{ mt: 4, mb: 4 }}>
       {drugs.results.map((drug) => (
         <Grid
           component={"section"}
@@ -37,42 +38,48 @@ export const DrugListItems = ({ drugs }) => {
               flexDirection: "column",
             }}
           >
-            <CardActionArea sx={{ display: "flex", flexGrow: 1 }}>
+            <CardActionArea
+              sx={{ display: "flex", justifyContent: "start", flexGrow: 1 }}
+            >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                   {drug.openfda.brand_name}
                 </Typography>
                 <Typography variant="subtitle1">
-                  Family Dollar (FAMILY WELLNESS)
+                  {drug.openfda.manufacturer_name}
                 </Typography>
                 {drug.openfda.product_type == "HUMAN OTC DRUG" ? (
-                  <TaskIcon
-                    fontSize="large"
-                    sx={{
-                      mt: 1,
-                      bgcolor: green[500],
-                      color: "white",
-                      borderRadius: "50%",
-                      p: 1,
-                      ":hover": {
-                        bgcolor: green[700],
-                      },
-                    }}
-                  />
+                  <Tooltip title="Human OTC">
+                    <TaskIcon
+                      fontSize="large"
+                      sx={{
+                        mt: 1,
+                        bgcolor: green[500],
+                        color: "white",
+                        borderRadius: "50%",
+                        p: 1,
+                        ":hover": {
+                          bgcolor: green[700],
+                        },
+                      }}
+                    />
+                  </Tooltip>
                 ) : (
-                  <RequestPageIcon
-                    fontSize="large"
-                    sx={{
-                      mt: 1,
-                      bgcolor: red[500],
-                      color: "white",
-                      borderRadius: "50%",
-                      p: 1,
-                      ":hover": {
-                        bgcolor: red[700],
-                      },
-                    }}
-                  />
+                  <Tooltip title="Human Prescription Drug">
+                    <RequestPageIcon
+                      fontSize="large"
+                      sx={{
+                        mt: 1,
+                        bgcolor: red[500],
+                        color: "white",
+                        borderRadius: "50%",
+                        p: 1,
+                        ":hover": {
+                          bgcolor: red[700],
+                        },
+                      }}
+                    />
+                  </Tooltip>
                 )}
               </CardContent>
             </CardActionArea>

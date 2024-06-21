@@ -21,6 +21,7 @@ export const Navbar = () => {
       sx={{
         backgroundColor: "success.main",
         display: "flex",
+        color: "white",
       }}
     >
       <Box

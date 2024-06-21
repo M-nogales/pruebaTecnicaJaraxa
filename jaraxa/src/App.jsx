@@ -8,6 +8,7 @@ import { DrugList } from "./components/DrugList";
 import { DrugDetail } from "./components/DrugDetail";
 import { ColorModeContext } from "./context/ColorModeContext";
 import { useColorMode } from './hooks/useColorMode';
+import Footer from "./components/Footer";
 
 const App = () => {
   // coment hook que contiene toda la lógica del theme switch con material UI
@@ -22,6 +23,7 @@ const App = () => {
             <Route path="/" element={<DrugList />} />
             <Route path="/drug/:drugId" element={<DrugDetail />} />
           </Routes>
+          <Footer/>
         </Router>
       </ThemeProvider>
     </ColorModeContext.Provider>
