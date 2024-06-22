@@ -20,10 +20,57 @@ El objetivo es realizar una web en React que use el API de OpenFDA (https://open
 2. [Estructura de Carpetas](#estructura-de-carpetas)
 3. [Retos](#retos)
 4. [Cosas a Mejorar](#cosas-a-mejorar)
-5. [Datos de Diseño](#datos-de-diseño)
-7. [Despliegue](#despliegue)
+5. [Despliegue](#despliegue)
 
 ## Estructura de carpetas
+```
+.
+├── public
+│   └── leaf_favicon.png
+└── src
+    ├── App.jsx
+    ├── main.jsx
+    ├── components
+    │   ├── DrugDetail.jsx // details of an item on a second page
+    │   ├── DrugList.jsx // form and main page
+    │   ├── DrugListItems.jsx // items of the grid
+    │   ├── Footer.jsx
+    │   └── Navbar.jsx 
+    ├── context
+    │   └── ColorModeContext.js // context for managing the theme
+    ├── data  // data for debugging
+    │   ├── errorResponse.json 
+    │   └── successResponse.json 
+    ├── hooks
+    │   ├── useColorMode.js // theme management
+    │   ├── useDrugs.js  // data passing to fetch and handling search results
+    │   └── useSearch.js // validation and search handling
+    └── services
+        └── fetchDrugs.js // data fetching
+
+```
+
 ## Retos
+
+En esta prueba he enfrentado varios desafíos. Es la primera vez que utilizo reactRouter y MaterialUI (anteriormente había utilizado Next UI). Además, es la primera vez que me enfrento a la implementación de una paginación o formularios de búsqueda para una API que es bastante "compleja" en términos de su nivel de inglés y documentación.
+
 ## Cosas a Mejorar
+
+Se podrían implementar un diseño más sofisticado, incluyendo mejoras en la paleta de colores del darkTheme. Además, sería beneficioso mejorar el DrugDetail, considerando la inclusión de un botón de descarga que genere un PDF con todos los datos del medicamento utilizando React-PDF u herramientas similares. También se podría agregar desplegables con información relevante y recurrente, según las necesidades del cliente.
+
 ## Despliegue
+### Primer paso
+
+Entrar en el proyecto y actualizar dependencias
+
+```
+cd jaraxa
+npm i
+```
+### Segundo paso
+
+Iniciar y abrir el [servidor](http://localhost:5173/)
+
+```
+npm run dev
+```
