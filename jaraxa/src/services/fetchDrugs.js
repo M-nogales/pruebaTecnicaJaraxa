@@ -27,7 +27,7 @@ function constructQueryString(searchData) {
   return queryParts.join("+AND+");
 }
 // created to fetch the needed data easily
-export const fetchDrugs = async (searchData) => {
+export const fetchDrugs = async (searchData, limit = 12, skip = 0) => {
   // return null if searchData is void
   if (
     !searchData.substanceName &&
@@ -41,10 +41,9 @@ export const fetchDrugs = async (searchData) => {
     // build of the query with the search parts
     let queryString = constructQueryString(searchData);
     const response = await fetch(
-      `https://api.fda.gov/drug/label.json?search=${queryString}&limit=12`
+      `https://api.fda.gov/drug/label.json?search=${queryString}&limit=${limit}&skip=${skip}`
     );
     const drug = await response.json();
-
     if (drug.error) {
       throw new Error(drug.error.message || "Unknown error");
     }

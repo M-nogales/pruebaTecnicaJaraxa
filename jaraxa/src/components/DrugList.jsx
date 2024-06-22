@@ -12,6 +12,7 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
+  Pagination,
 } from "@mui/material";
 
 import {  useEffect, useState } from "react";
@@ -29,23 +30,39 @@ export const DrugList = () => {
   } = useSearch();
 
   const { drugs, getDrugs, loading, error } = useDrugs();
-  // controll and visual hooks
+
+  // control and visual hooks
   const [submitted,setSubmitted] = useState(false);
   const [openBackdrop, setOpenBackdrop] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
+  // page control
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  // on page change if an error appears set searchData empty and not add pages
+  // event needed for MaterialUI pagination, else value will get an object
+  const handlePageChange = (event,value) => {
+    if (error) {
+      setSearchData({
+        substanceName: "",
+        genericName: "",
+        manufacturer: "",
+        OTC: false,
+      });
+    }else{
+      setCurrentPage(value);
+      getDrugs(searchData, itemsPerPage, (value - 1) * itemsPerPage);
+    }
+  };
+  // on Submit, pass searchData and inicial page to 0
   const handleSubmit = (e) => {
     e.preventDefault();
     if (inputError.substanceName || inputError.genericName || inputError.manufacturer) {
       return;
     }
-    getDrugs(searchData);
-    setSearchData({
-      substanceName: "",
-      genericName: "",
-      manufacturer: "",
-      OTC: false,
-    });
+    getDrugs(searchData, itemsPerPage, 0);
+    setCurrentPage(1);
     setSubmitted(true);
     setOpenBackdrop(true);
     isFirstInput.current = {
@@ -54,7 +71,7 @@ export const DrugList = () => {
       manufacturer: true,
     };
   };
-  // useEffects to check if there´s new errors an spawn backdrop
+  // useEffects to check if there´s new errors, spawn backdrop
   useEffect(() => {
     if (error) {
       setOpenSnackbar(true);
@@ -65,7 +82,7 @@ export const DrugList = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setOpenBackdrop(false);
-    }, 3000);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [openBackdrop]);
@@ -78,7 +95,7 @@ export const DrugList = () => {
       ...prevSearchData,
       [name]: name === "OTC" ? checked : value,
     }));
-    //update useRef, if the value is empty and is not the firstInput,change it
+    // update useRef, if the value is empty and is not the firstInput,change it
     // if the value is not empty and is the firstInput,change it
     if (value === "" && isFirstInput.current[name] === false) {
       isFirstInput.current[name] = true;
@@ -216,9 +233,22 @@ export const DrugList = () => {
         <Box sx={{w:1,display:"flex",justifyContent:"center",my:4}}>
         <CircularProgress size={80}></CircularProgress>
         </Box>
-      )} 
-       {submitted &&  drugs && (
+      )}
+      {/*DrugItems, only visible if you submitted, u get a results an there´s no errors on search */}
+       {submitted &&  drugs && !error &&(
+        <>
          <DrugListItems drugs={drugs} />
+         {/* only if there´s more than 1 page, */}
+         {drugs.meta.results.total > itemsPerPage && (
+          <Pagination
+            count={Math.ceil(drugs.meta.results.total / itemsPerPage)}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+            sx={{ mt: 4, display: "flex", justifyContent: "center" }}
+          />
+        )}
+        </>
       )} 
 
     </Container>

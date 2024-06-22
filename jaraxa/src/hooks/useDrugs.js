@@ -8,24 +8,26 @@ export const useDrugs = () => {
   // save of last input to stop useless fetch of data
   const prevInput = useRef(null);
 
-  const getDrugs = useCallback(async (searchData) => {
+  const getDrugs = useCallback(async (searchData, limit = 12, skip = 0) => {
     if (!searchData) return;
 
+    const currentSearch = { ...searchData, limit, skip };
+    console.log("searchData " +JSON.stringify(searchData) + " limit " +limit +" skip "+ skip);
     //check para evitar fetch de lo mismo
-    if (JSON.stringify(searchData) === JSON.stringify(prevInput.current)) {
+    if (JSON.stringify(currentSearch) === JSON.stringify(prevInput.current)) {
       return null;
     }
-
+    console.log("llega");
     try {
       setLoading(true);
       setError(null);
-      const drugs = await fetchDrugs(searchData);
+      const drugs = await fetchDrugs(searchData, limit, skip);
       setDrugs(drugs);
     } catch (error) {
       setError(error.message);
     } finally {
       setLoading(false);
-      prevInput.current = searchData;
+      prevInput.current = currentSearch;
     }
   }, []);
   
